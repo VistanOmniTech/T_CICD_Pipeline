@@ -1,0 +1,14 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Home</title>
+  </head>
+  <body>
+    <h1>Home — Image Display</h1>
+    <p>This image is served from the app static files:</p>
+    <img src="{% static 'T_CICD_app/images/django_image.png' %}" alt="Sample image" style="max-width:100%;height:auto;" />
+  </body>
+</html>
