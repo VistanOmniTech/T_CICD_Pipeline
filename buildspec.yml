@@ -5,22 +5,16 @@ phases:
     runtime-versions:
       python: 3.9
     commands:
-      - echo "Installing dependencies"
+      - echo "Creating virtual environment"
       - python3 -m venv venv
-      - . venv/bin/activate
-      - pip install --upgrade pip
-      - pip install -r requirements.txt
-
-  pre_build:
-    commands:
-      - . venv/bin/activate
-      - python manage.py check
+      - venv/bin/pip install --upgrade pip
+      - venv/bin/pip install -r requirements.txt
 
   build:
     commands:
-      - echo "Build completed"
+      - echo "Running Django checks"
+      - venv/bin/python manage.py check
 
 artifacts:
   files:
     - '**/*'
-
