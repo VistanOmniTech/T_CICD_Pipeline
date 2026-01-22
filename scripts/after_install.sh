@@ -2,16 +2,14 @@
 set -e
 
 APP_DIR="/home/ubuntu/T_CICD_Project"
-PYTHON="/usr/bin/python3"
+VENV_DIR="$APP_DIR/venv"
 
 sudo -u ubuntu bash <<EOF
 cd $APP_DIR
+source $VENV_DIR/bin/activate
+pip install --upgrade pip
+pip install -r requirements.txt
 
-$PYTHON -m venv venv
-
-./venv/bin/pip install --upgrade pip
-./venv/bin/pip install -r requirements.txt
-
-./venv/bin/python manage.py collectstatic --noinput
-./venv/bin/python manage.py migrate
+python manage.py collectstatic --noinput
+python manage.py migrate
 EOF
