@@ -10,7 +10,7 @@ source $VENV_DIR/bin/activate
 
 pkill gunicorn || true
 
-$VENV_DIR/bin/gunicorn T_CICD_Project.wsgi:application \
+gunicorn T_CICD_Project.wsgi:application \
   --bind 0.0.0.0:8000 \
   --workers 3 \
   --daemon
