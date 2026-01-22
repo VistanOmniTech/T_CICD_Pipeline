@@ -1,12 +1,10 @@
 #!/bin/bash
+set -e
 
 cd /home/ubuntu/T_CICD_Project
 
-python3 -m venv venv
+sudo -u ubuntu bash <<EOF
 source venv/bin/activate
-
-pip install --upgrade pip
-pip install -r requirements.txt
-
-python manage.py migrate
 python manage.py collectstatic --noinput
+python manage.py migrate
+EOF
