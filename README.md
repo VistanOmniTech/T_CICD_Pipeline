@@ -8,8 +8,6 @@ chmod +x install
 sudo ./install auto
 sudo systemctl start codedeploy-agent
 sudo systemctl enable codedeploy-agent
-<<<<<<< HEAD
-=======
 
 
 Add a in your github repository ---> settings ---> secrets & variables ---> actions add a
@@ -56,4 +54,12 @@ jobs:
             --application-name myproject-codedeploy-app \
             --deployment-group-name myproject-deployment-group \
             --s3-location bucket=myproject-cicd-artifacts,key=deploy.zip,bundleType=zip
->>>>>>> 39ae6b4 (new)
+
+
+
+
+create a iam user for below policys 
+
+1.AmazonS3FullAccess
+
+2.AWSCodeDeployFullAccess
