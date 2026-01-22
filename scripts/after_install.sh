@@ -8,11 +8,10 @@ sudo -u ubuntu bash <<EOF
 cd $APP_DIR
 
 $PYTHON -m venv venv
-source venv/bin/activate
 
-pip install --upgrade pip
-pip install -r requirements.txt
+./venv/bin/pip install --upgrade pip
+./venv/bin/pip install -r requirements.txt
 
-python manage.py collectstatic --noinput
-python manage.py migrate
+./venv/bin/python manage.py collectstatic --noinput
+./venv/bin/python manage.py migrate
 EOF
