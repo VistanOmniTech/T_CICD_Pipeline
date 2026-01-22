@@ -1,4 +1,4 @@
-name: Deploy Django to EC2
+name: Django CI/CD Pipeline
 
 on:
   push:
@@ -13,27 +13,23 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup SSH
+      - name: Zip project
+        run: zip -r deploy.zip .
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Upload to S3
         run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+          aws s3 cp deploy.zip s3://myproject-cicd-artifacts/deploy.zip
 
-      - name: Deploy to EC2
+      - name: Deploy via CodeDeploy
         run: |
-          ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-            cd /home/deploy/django-app
-            git pull origin main
-
-            source venv/bin/activate
-            pip install -r requirements.txt
-
-            export DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}
-            export DJANGO_SETTINGS_MODULE=${{ secrets.DJANGO_SETTINGS_MODULE }}
-
-            python manage.py migrate
-            python manage.py collectstatic --noinput
-
-            sudo systemctl restart gunicorn
-          EOF
+          aws deploy create-deployment \
+            --application-name myproject-codedeploy-app \
+            --deployment-group-name myproject-deployment-group \
+            --s3-location bucket=myproject-cicd-artifacts,key=deploy.zip,bundleType=zip
